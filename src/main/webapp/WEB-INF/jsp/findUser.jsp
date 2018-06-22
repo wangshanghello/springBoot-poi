@@ -11,7 +11,7 @@
 %>
 </head>
 <body>
-	<table>
+	<table border="1">
 		<tr>
 			<th>name</th>
 			<th>age</th>
@@ -24,5 +24,7 @@
 		</c:forEach>
 	</table><p>
 <a href="<%=path%>/addUser">addUser</a>
+<p>
+<a href="<%=path%>/expor">导出</a>
 </body>
 </html>

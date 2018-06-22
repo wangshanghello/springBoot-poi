@@ -1,6 +1,6 @@
-
 package com.itmayiedu.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.itmayiedu.entity.User;
 import com.itmayiedu.mapper.UserMapper;
+
 /**
  * 
- *  @author wangshang
- * 	@date 2018Äê6ÔÂ20ÈÕ/ÉÏÎç10:08:39  
- * 	@Àà×÷ÓÃ:
+ * @author wangshang
+ * @date 2018å¹´6æœˆ21æ—¥/ä¸‹åˆ8:22:27
+ * @ç±»ä½œç”¨: controller
  */
-//Èç¹ûÖ»ÊÇÊ¹ÓÃ@RestController×¢½âController£¬ÔòControllerÖĞµÄ·½·¨ÎŞ·¨·µ»ØjspÒ³Ãæ
 @Controller
 public class IndexController {
 	@Autowired
@@ -25,20 +25,47 @@ public class IndexController {
 
 	@RequestMapping("/findUser")
 	public String findUser(HttpServletRequest request) {
-		 List<User> user = userMapper.findByName();
+		List<User> user = userMapper.findByName();
+
 		request.setAttribute("user", user);
+
 		return "findUser";
 	}
+
 	@RequestMapping("addUser")
-	public String addUser(){
-		
+	public String addUser() {
+
 		return "addUser";
 	}
+
 	@RequestMapping("addUsers")
-	public String addUsers(User u){
-		
+	public String addUsers(User u) {
+
 		userMapper.insert(u);
 		return "redirect:/findUser";
 	}
-	
+
+	// å¯¼å‡º
+	@RequestMapping("expor")
+	public String expor() throws Exception {
+		String title = "äººå‘˜è¡¨";
+		String[] rowsName = new String[] { "åºå·", "åå­—", "å¹´é¾„" };
+		List<User> user = userMapper.findByName();
+
+		List<Object[]> dataList = new ArrayList<Object[]>();
+		Object[] objs = null;
+		for (int i = 0; i < user.size(); i++) {
+			User u = user.get(i);
+			objs = new Object[rowsName.length];
+			objs[0] = u.getId();
+			objs[1] = u.getName();
+			objs[2] = u.getAge();
+			dataList.add(objs);
+		}
+
+		ExportExcel ex = new ExportExcel(title, rowsName, dataList);
+		ex.export();
+		return "redirect:/findUser";
+
+	}
 }
